@@ -1,9 +1,10 @@
 # write your code here
-cmd = input()
-
-
 def regexp(exp, text):
-    return (exp == text) or (exp == ".") or not exp
+    if not exp:
+        return True
+    if not text or (exp[0] != text[0] and exp[0] != "."):
+        return False
+    return regexp(exp[1:], text[1:])
 
 
-print(regexp(*cmd.split("|")))
+print(regexp(*input().split("|")))

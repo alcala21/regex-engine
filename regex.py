@@ -4,6 +4,11 @@ def match(exp, text):
     if not text:
         return exp == "$"
 
+    if exp[0] == "\\":
+        if exp[1:2] == text[0]:
+            return match(exp[2:], text[1:])
+        return False
+
     if exp[0] != text[0] and exp[0] != ".":
         if exp[1:2] in ["?", "*"]:
             return match(exp[2:], text)

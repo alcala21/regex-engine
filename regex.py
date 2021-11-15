@@ -1,11 +1,21 @@
-# write your code here
 def match(exp, text):
     if not exp:
         return True
-    if exp == "$" and not text:
-        return True
-    if not text or (exp[0] != text[0] and exp[0] != "."):
+    if not text:
+        return exp == "$"
+
+    if exp[0] != text[0] and exp[0] != ".":
+        if exp[1:2] in ["?", "*"]:
+            return match(exp[2:], text)
         return False
+
+    if exp[1:2] == "?":
+        return match(exp[2:], text[1:])
+    if exp[1:2] == "*":
+        return match(exp, text[1:]) or match(exp[2:], text)
+    if exp[1:2] == "+":
+        return match(exp, text[1:]) or match(exp[2:], text[1:])
+
     return match(exp[1:], text[1:])
 
 
@@ -20,5 +30,6 @@ def regexp(pattern, string):
         return pattern == "$"
 
     return regexp(pattern, string[1:])
+
 
 print(regexp(*input().split("|")))
